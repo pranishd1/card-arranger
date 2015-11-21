@@ -15,7 +15,7 @@ public class ComboRunnerTest {
             List<Card> allCards=Const.getAllCards();
             CardFolder cardFolder=new CardFolder();
             cardFolder.shuffleCard(allCards,3);
-            List<Card> myCards=cardFolder.getDivision(allCards,4,9).get(0);
+            List<Card> myCards=cardFolder.getDivision(allCards,4,13).get(0);
             cardFolder.sortDividedCards(myCards);
             System.out.println("----------------OLD CARDS-------------------------");
             for(Card card:myCards){

@@ -22,7 +22,7 @@ public class Falash extends RulesAbs {
     private List<Card> myGroup=null;
     private Map<CardGroup,Map<Card,Integer>> validCounter=new HashMap<>(0);
     private List<Card> validCardIds=null;
-    private List<List<Card>> sortedValidList=null;
+    private List<List<Card>> sortedCardValidGroup =null;
     private CardSorter cardSorter=null;
 
 
@@ -49,7 +49,7 @@ public class Falash extends RulesAbs {
     public boolean isValid() {
         boolean isValid=false;
         validCardIds=new ArrayList<>(0);
-        sortedValidList=new ArrayList<>(0);
+        sortedCardValidGroup =new ArrayList<>(0);
 
         for(Map.Entry<CardGroup,Map<Card,Integer>> entry:validCounter.entrySet()){
             if(entry.getValue().size()>=SINGLE_GROUP_SIZE){
@@ -64,7 +64,7 @@ public class Falash extends RulesAbs {
                         if(singleEntryGroup==SINGLE_GROUP_SIZE){
                              cardSorter=new CardSorter(validCardIds,new CardCompareDesc());
                             List<Card> refined=cardSorter.getMyGroup();
-                            sortedValidList.add(refined);
+                            sortedCardValidGroup.add(refined);
                             validCardIds=new ArrayList<>(0);
                             singleEntryGroup=0;
                         }
@@ -78,21 +78,21 @@ public class Falash extends RulesAbs {
     }
 
     private void sortAndAdd(){
-        for(int i=0;i<sortedValidList.size();i++){
-            for(int j=0;j<sortedValidList.size();j++){
+        for(int i=0;i< sortedCardValidGroup.size();i++){
+            for(int j=0;j< sortedCardValidGroup.size();j++){
                 boolean found=false;
                 int k=0;
               while(!found){
                   if(k==SINGLE_GROUP_SIZE){
                       break;
                   }
-                    if(sortedValidList.get(i).get(k).getNumber()==sortedValidList.get(j).get(k).getNumber()){
+                    if(sortedCardValidGroup.get(i).get(k).getNumber()== sortedCardValidGroup.get(j).get(k).getNumber()){
                         k++;
                     }else{
-                        if(sortedValidList.get(i).get(k).getNumber()>sortedValidList.get(j).get(k).getNumber()){
-                            List<Card> temp=sortedValidList.get(i);
-                            sortedValidList.set(i, sortedValidList.get(j));
-                            sortedValidList.set(j, temp);
+                        if(sortedCardValidGroup.get(i).get(k).getNumber()> sortedCardValidGroup.get(j).get(k).getNumber()){
+                            List<Card> temp= sortedCardValidGroup.get(i);
+                            sortedCardValidGroup.set(i, sortedCardValidGroup.get(j));
+                            sortedCardValidGroup.set(j, temp);
                         }
                         break;
                     }
@@ -115,7 +115,7 @@ public class Falash extends RulesAbs {
     @Override
     public List<Card> getValidCards() {
         List<Card> onlyValidCards=new ArrayList<>(0);
-        for(List<Card> cards:sortedValidList){
+        for(List<Card> cards: sortedCardValidGroup){
             for(Card card:cards){
                 onlyValidCards.add(card);
             }

@@ -23,7 +23,7 @@ public class Jute extends RulesAbs {
 
     private List<Card> myGroup;
     private Map<Integer,List<Card>> cardCounter=new HashMap<>(0);
-    private List<List<Card>> sortedValidList=null;
+    private List<List<Card>> sortedCardValidGroup =null;
     private List<Card> nonJuteCards=null;
 
     private final int ON_JUTE_GROUP_CARD_SELECTION_TEHNIQUE=ASCENDING_ORDER;
@@ -51,7 +51,7 @@ public class Jute extends RulesAbs {
     @Override
     public boolean isValid() {
         boolean isValid=false;
-        sortedValidList=new ArrayList<>(0);
+        sortedCardValidGroup =new ArrayList<>(0);
         nonJuteCards=new ArrayList<>(0);
 
         List<Card> singleGroup=new ArrayList<>(0);
@@ -95,14 +95,14 @@ public class Jute extends RulesAbs {
     @Override
     public int countValidOne() {
         int validCounts=0;
-        validCounts=sortedValidList.size();
+        validCounts= sortedCardValidGroup.size();
         return validCounts;
     }
 
     @Override
     public List<Card> getValidCards() {
         List<Card> onlyValidCards=new ArrayList<>(0);
-        for(List<Card> cards:sortedValidList){
+        for(List<Card> cards: sortedCardValidGroup){
             for(Card card:cards){
                 onlyValidCards.add(card);
             }
@@ -124,23 +124,23 @@ public class Jute extends RulesAbs {
                 temp.add(card);
             }
         }
-        sortedValidList.add(temp);
+        sortedCardValidGroup.add(temp);
     }
 
     private void sortAndAdd(){
-        for(int i=0;i<sortedValidList.size();i++){
-            for(int j=0;j<sortedValidList.size();j++){
-                if(getJuteNumberFrom(sortedValidList.get(i))==getJuteNumberFrom(sortedValidList.get(j))){
-                    if(getNonJuteNumberFrom(sortedValidList.get(i))>getNonJuteNumberFrom(sortedValidList.get(j))){
-                        List<Card> temp=sortedValidList.get(i);
-                        sortedValidList.set(i, sortedValidList.get(j));
-                        sortedValidList.set(j, temp);
+        for(int i=0;i< sortedCardValidGroup.size();i++){
+            for(int j=0;j< sortedCardValidGroup.size();j++){
+                if(getJuteNumberFrom(sortedCardValidGroup.get(i))==getJuteNumberFrom(sortedCardValidGroup.get(j))){
+                    if(getNonJuteNumberFrom(sortedCardValidGroup.get(i))>getNonJuteNumberFrom(sortedCardValidGroup.get(j))){
+                        List<Card> temp= sortedCardValidGroup.get(i);
+                        sortedCardValidGroup.set(i, sortedCardValidGroup.get(j));
+                        sortedCardValidGroup.set(j, temp);
                     }
                 }
-                if(getJuteNumberFrom(sortedValidList.get(i))>getJuteNumberFrom(sortedValidList.get(j))){
-                    List<Card> temp=sortedValidList.get(i);
-                    sortedValidList.set(i, sortedValidList.get(j));
-                    sortedValidList.set(j, temp);
+                if(getJuteNumberFrom(sortedCardValidGroup.get(i))>getJuteNumberFrom(sortedCardValidGroup.get(j))){
+                    List<Card> temp= sortedCardValidGroup.get(i);
+                    sortedCardValidGroup.set(i, sortedCardValidGroup.get(j));
+                    sortedCardValidGroup.set(j, temp);
                 }
             }
         }

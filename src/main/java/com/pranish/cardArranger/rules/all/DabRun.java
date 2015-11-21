@@ -23,7 +23,7 @@ public class DabRun extends RulesAbs {
     private Map<CardGroup,Map<Card,Integer>> validCounter=new HashMap<>(0);
     private Map<Integer,CardGroup> validCardIds=null;
     private List<Card> filteredCards=null;
-    private List<List<Card>> sortedCards=null;
+    private List<List<Card>> sortedCardValidGroup =null;
 
     @Override
     public RulesIface initialize(List<Card> myGroup) {
@@ -46,7 +46,7 @@ public class DabRun extends RulesAbs {
     @Override
     public boolean isValid() {
        boolean isValid=false;
-        sortedCards=new ArrayList<>(0);
+        sortedCardValidGroup =new ArrayList<>(0);
         filteredCards=new ArrayList<>(0);
         validCardIds=new HashMap<>(0);
 
@@ -62,7 +62,7 @@ public class DabRun extends RulesAbs {
                         addCards(cardGroup.getKey(), CardNumbers.getAce());
                         addCards(cardGroup.getKey(), CardNumbers.getTwo());
                         addCards(cardGroup.getKey(), CardNumbers.getThree());
-                        sortedCards.add(filteredCards);
+                        sortedCardValidGroup.add(filteredCards);
                         isValid = true;
                     }
                 }
@@ -77,7 +77,7 @@ public class DabRun extends RulesAbs {
                         addCards(cardGroup.getKey(), card.getValue());
                         addCards(cardGroup.getKey(), card.getValue() - 1);
                         addCards(cardGroup.getKey(),card.getValue()-2);
-                        sortedCards.add(filteredCards);
+                        sortedCardValidGroup.add(filteredCards);
                         isValid=true;
                     }
                 }
@@ -90,13 +90,13 @@ public class DabRun extends RulesAbs {
 
    @Override
     public int countValidOne() {
-        return validCardIds.size()/SINGLE_GROUP_SIZE;
+        return sortedCardValidGroup.size();
     }
 
     @Override
     public List<Card> getValidCards() {
         List<Card> onlyValidCards=new ArrayList<>(0);
-        for(List<Card> cards:sortedCards) {
+        for(List<Card> cards: sortedCardValidGroup) {
             for (Card card : cards) {
                 onlyValidCards.add(card);
             }
@@ -119,12 +119,12 @@ public class DabRun extends RulesAbs {
     }
 
     private void sortAndAdd(){
-        for(int i=0;i<sortedCards.size();i++){
-            for(int j=0;j<sortedCards.size();j++){
-                if(sortedCards.get(i).get(0).getNumber()>sortedCards.get(j).get(0).getNumber()){
-                    List<Card> temp=sortedCards.get(i);
-                    sortedCards.set(i,sortedCards.get(j));
-                    sortedCards.set(j,temp);
+        for(int i=0;i< sortedCardValidGroup.size();i++){
+            for(int j=0;j< sortedCardValidGroup.size();j++){
+                if(sortedCardValidGroup.get(i).get(0).getNumber()> sortedCardValidGroup.get(j).get(0).getNumber()){
+                    List<Card> temp= sortedCardValidGroup.get(i);
+                    sortedCardValidGroup.set(i, sortedCardValidGroup.get(j));
+                    sortedCardValidGroup.set(j,temp);
                 }
             }
         }

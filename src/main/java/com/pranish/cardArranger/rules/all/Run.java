@@ -18,7 +18,7 @@ import java.util.Map;
 public class Run extends RulesAbs {
     private List<Card> myGroup = null;
     private Map<Integer, List<Card>> cardCounter = new HashMap<>(0);
-    private List<List<Card>> collectedCards = null;
+    private List<List<Card>> sortedCardValidGroup = null;
     private List<Card> singleGroup = null;
 
     @Override
@@ -43,7 +43,7 @@ public class Run extends RulesAbs {
     public boolean isValid() {
         boolean isValid = false;
         singleGroup=new ArrayList<>(0);
-        collectedCards=new ArrayList<>(0);
+        sortedCardValidGroup =new ArrayList<>(0);
 
         if (hasAceTwoThree()) {
             addAceTwoAndThree();
@@ -61,7 +61,7 @@ public class Run extends RulesAbs {
                         singleGroup.add(cardThree);
                         singleGroup.add(cardOne);
                         singleGroup.add(cardTwo);
-                        collectedCards.add(sortSingleGroup(singleGroup));
+                        sortedCardValidGroup.add(sortSingleGroup(singleGroup));
                         singleGroup = new ArrayList<>(0);
                         isValid = true;
                     }
@@ -75,14 +75,14 @@ public class Run extends RulesAbs {
     @Override
     public int countValidOne() {
         int validCounts = 0;
-        validCounts = collectedCards.size();
+        validCounts = sortedCardValidGroup.size();
         return validCounts;
     }
 
     @Override
     public List<Card> getValidCards() {
         List<Card> onlyValidCards = new ArrayList<>(0);
-        for (List<Card> cards : collectedCards) {
+        for (List<Card> cards : sortedCardValidGroup) {
             for (Card card : cards) {
                 onlyValidCards.add(card);
             }
@@ -101,7 +101,7 @@ public class Run extends RulesAbs {
                 singleGroup.add(cardOne);
                 singleGroup.add(cardTwo);
                 singleGroup.add(cardThree);
-                collectedCards.add(sortSingleGroup(singleGroup));
+                sortedCardValidGroup.add(sortSingleGroup(singleGroup));
                 singleGroup = new ArrayList<>(0);
             }
         }
@@ -123,12 +123,12 @@ public class Run extends RulesAbs {
     }
 
     private void sortAndAdd() {
-        for (int i = 0; i < collectedCards.size(); i++) {
-            for (int j = 0; j < collectedCards.size(); j++) {
-                if (collectedCards.get(i).get(0).getNumber() > collectedCards.get(j).get(0).getNumber()) {
-                    List<Card> temp = collectedCards.get(i);
-                    collectedCards.set(i, collectedCards.get(j));
-                    collectedCards.set(j, temp);
+        for (int i = 0; i < sortedCardValidGroup.size(); i++) {
+            for (int j = 0; j < sortedCardValidGroup.size(); j++) {
+                if (sortedCardValidGroup.get(i).get(0).getNumber() > sortedCardValidGroup.get(j).get(0).getNumber()) {
+                    List<Card> temp = sortedCardValidGroup.get(i);
+                    sortedCardValidGroup.set(i, sortedCardValidGroup.get(j));
+                    sortedCardValidGroup.set(j, temp);
                 }
             }
         }
@@ -148,7 +148,7 @@ public class Run extends RulesAbs {
 
     private boolean isInCollection(Card card) {
         boolean foundInCollection = false;
-        for (List<Card> cards : collectedCards) {
+        for (List<Card> cards : sortedCardValidGroup) {
             for (Card allCard : cards) {
                 if (card.getId() == allCard.getId()) {
                     foundInCollection = true;

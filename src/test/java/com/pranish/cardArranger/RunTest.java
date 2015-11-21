@@ -50,50 +50,55 @@ public class RunTest {
             Card card = new Card();
             card.setGroup(CardGroup.CLUB);
             card.setNumber(5);
-            card.setId(10);
+            card.setId(Const.getCardIdFromGroupAndName(card.getGroup(),card.getName()));
             collection.add(card);
 
             Card card1 = new Card();
             card1.setGroup(CardGroup.SPADE);
             card1.setNumber(6);
-            card1.setId(48);
+            card1.setId(Const.getCardIdFromGroupAndName(card1.getGroup(),card1.getName()));
             collection.add(card1);
 
             Card card2 = new Card();
             card2.setGroup(CardGroup.HEART);
             card2.setNumber(7);
-            card2.setId(34);
+            card2.setId(Const.getCardIdFromGroupAndName(card2.getGroup(),card2.getName()));
             collection.add(card2);
 
             Card card3 = new Card();
             card3.setGroup(CardGroup.SPADE);
             card3.setNumber(8);
-            card3.setId(46);
+            card3.setId(Const.getCardIdFromGroupAndName(card3.getGroup(),card3.getName()));
             collection.add(card3);
 
             Card card4 = new Card();
             card4.setGroup(CardGroup.HEART);
             card4.setNumber(9);
-            card4.setId(32);
+            card4.setId(Const.getCardIdFromGroupAndName(card4.getGroup(),card4.getName()));
             collection.add(card4);
 
             Card card5 = new Card();
             card5.setGroup(CardGroup.CLUB);
             card5.setNumber(7);
-            card5.setId(8);
+            card5.setId(Const.getCardIdFromGroupAndName(card5.getGroup(),card5.getName()));
             collection.add(card5);
 
-            List<Card> otherCards = Const.getCertainCards(4);
+            Card card6 = new Card();
+            card6.setGroup(CardGroup.CLUB);
+            card6.setNumber(4);
+            card6.setId(Const.getCardIdFromGroupAndName(card6.getGroup(),card6.getName()));
+            collection.add(card6);
+
+            List<Card> otherCards = Const.getCertainCards(6);
             CardFolder cardFolder = new CardFolder();
             List<Card> newFormedCard = cardFolder.replaceCards(otherCards, collection).getFormedCards();
             cardFolder.sortDividedCards(newFormedCard).toDescending();
-            System.out.println("-----------CREATED CARDS----------------------");
-            for (Card newCard : newFormedCard) {
-                System.out.println(" Number: " + newCard.getNumber() + " Name: " + newCard.getName() + " Group: " + newCard.getGroup());
-            }
-
             RulesIface rules = new Run();
             newFormedCard = Const.removeDuplicates(newFormedCard);
+            System.out.println("-----------CREATED CARDS----------------------");
+            for (Card newCard : newFormedCard) {
+                System.out.println(newCard.toString());
+            }
             rules.initialize(newFormedCard);
             if (rules.isValid()) {
                 System.out.println(rules.countValidOne());

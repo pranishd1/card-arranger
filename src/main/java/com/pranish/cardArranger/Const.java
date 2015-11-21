@@ -49,15 +49,6 @@ public class Const {
         return newCertainCards;
     }
 
-   /* public static List<Integer> getAllNumbersForCard(){
-        int singleGroup=TOTAL_CARDS/TOTAL_CARD_GROUP;
-        List<Integer> temp=new ArrayList<>(HIGHEST_NUMBER);
-        for(int i= GROUP_STARTING_CARD;i<= HIGHEST_NUMBER;i++){
-            temp.add(i);
-        }
-        return temp;
-    }*/
-
     public static List<CardGroup> getAllGroup(){
        List<CardGroup> temp=new ArrayList<>(TOTAL_CARD_GROUP);
         temp.add(CardGroup.CLUB);
@@ -136,4 +127,15 @@ public class Const {
         return remainingCards;
     }
 
+    public static int getCardIdFromGroupAndName(CardGroup cardGroup,String name) throws Exception {
+        Card temp=null;
+        List<Card> allCards=getAllCards();
+        for(Card card:allCards){
+            if(card.getGroup().getValue()==cardGroup.getValue()
+                    && card.getName().equals(name)){
+                temp=card;
+            }
+        }
+        return temp.getId();
+    }
 }

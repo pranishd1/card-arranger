@@ -16,14 +16,6 @@ public class CardFolder {
         }
     }
 
-    /*public List<Integer> getAllNumbers(){
-        List<Integer> temp=new ArrayList<>();
-        for(int i=Const.STARTING_CARD;i<=Const.TOTAL_CARDS;i++){
-            temp.add(i);
-        }
-        return temp;
-    }*/
-
     public List<List<Card>> getDivision(List<Card> shuffledCards,int size){
         List<List<Card>> allGroupCollection=new ArrayList<>();
         int count=0;
