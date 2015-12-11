@@ -1,4 +1,4 @@
-package com.pranish.cardArranger;
+package com.pranish.cardArranger.card;
 
 /**
  * Created by pranish on 11/14/15.
@@ -23,7 +23,7 @@ public class Card {
 
     public Card setNumber(int number) throws Exception {
         this.number = number;
-        this.name=Const.setNameForCard(number);
+        this.name= CardConst.setNameForCard(number);
         return this;
     }
 

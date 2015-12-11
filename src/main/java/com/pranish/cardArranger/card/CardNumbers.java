@@ -1,4 +1,4 @@
-package com.pranish.cardArranger.rules;
+package com.pranish.cardArranger.card;
 
 /**
  * Created by pranish on 11/15/15.

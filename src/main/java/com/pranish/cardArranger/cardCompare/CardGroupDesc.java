@@ -1,6 +1,6 @@
 package com.pranish.cardArranger.cardCompare;
 
-import com.pranish.cardArranger.Card;
+import com.pranish.cardArranger.card.Card;
 
 import java.util.Comparator;
 

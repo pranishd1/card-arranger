@@ -1,92 +1,83 @@
 package com.pranish.cardArranger.rules.common;
 
-import com.pranish.cardArranger.Card;
-import com.pranish.cardArranger.CardFolder;
+import com.pranish.cardArranger.card.Card;
+import com.pranish.cardArranger.card.CardFolder;
 import com.pranish.cardArranger.rules.RulesIface;
 import com.pranish.cardArranger.rules.all.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pranish on 11/17/15.
  */
 public class ComboRunner {
-    private static List<Card> replacer = new ArrayList<>(0);
+    private static List<Card> replacer ;
+    private static Map<RuleNumber,List<Card>> validCardsWithRuleNumber;
     private CardFolder cardFolder = new CardFolder();
 
     public ComboRunner(List<Card> myGroup) {
-        arranger(1, myGroup);
+        replacer=new ArrayList<>(0);
+        validCardsWithRuleNumber=new HashMap<>(0);
+        arranger(myGroup);
+
+
     }
 
-    private void arranger(int level, List<Card> myGroup) {
-        RulesIface rulesIface;
-
-        switch (level) {
-            case 1:
-                rulesIface = new Thirial();
+    private void arranger(List<Card> myGroup){
+        for(int i=0;i<=5;i++){
+            if(!myGroup.isEmpty()) {
+                RulesIface rulesIface = getRule(i);
                 rulesIface.initialize(myGroup);
                 if (rulesIface.isValid()) {
                     List<Card> temp = rulesIface.getValidCards();
-                    addToReplacer(temp, 1);
+                    addToReplacer(temp, i);
                     myGroup = cardFolder.replaceCards(myGroup, temp).getLeftOutCards();
                 }
-                arranger(2, myGroup);
+            }
+        }
+    }
+
+    private RulesIface getRule(int ruleNumber){
+        RulesIface rulesIface=null;
+        switch (ruleNumber){
+            case 0:
+                rulesIface= new Thirial();
+                break;
+            case 1:
+                rulesIface=new DaabRun();
                 break;
             case 2:
-                rulesIface = new DabRun();
-                rulesIface.initialize(myGroup);
-                if (rulesIface.isValid()) {
-                    List<Card> temp = rulesIface.getValidCards();
-                    addToReplacer(temp, 2);
-                    myGroup = cardFolder.replaceCards(myGroup, temp).getLeftOutCards();
-                }
-                arranger(3, myGroup);
+                rulesIface= new Run();
                 break;
             case 3:
-                rulesIface = new Run();
-                rulesIface.initialize(myGroup);
-                if (rulesIface.isValid()) {
-                    List<Card> temp = rulesIface.getValidCards();
-                    addToReplacer(temp, 3);
-                    myGroup = cardFolder.replaceCards(myGroup, temp).getLeftOutCards();
-                }
-                arranger(4, myGroup);
+                rulesIface= new Falash();
                 break;
             case 4:
-                rulesIface = new Falash();
-                rulesIface.initialize(myGroup);
-                if (rulesIface.isValid()) {
-                    List<Card> temp = rulesIface.getValidCards();
-                    addToReplacer(temp, 4);
-                    myGroup = cardFolder.replaceCards(myGroup, temp).getLeftOutCards();
-                }
-                arranger(5, myGroup);
+                rulesIface= new Jute();
                 break;
             case 5:
-                rulesIface = new Jute();
-                rulesIface.initialize(myGroup);
-                if (rulesIface.isValid()) {
-                    List<Card> temp = rulesIface.getValidCards();
-                    addToReplacer(temp, 5);
-                    myGroup = cardFolder.replaceCards(myGroup, temp).getLeftOutCards();
-                }
-                arranger(6, myGroup);
+                rulesIface=new Sort();
                 break;
-            case 6:
-                addToReplacer(cardFolder.sortDividedCards(myGroup).toDescending(), 6);
-                return;
         }
+        return rulesIface;
     }
 
     private static void addToReplacer(List<Card> myGroup, int caseNumber) {
         if(myGroup.size()>0) {
-            System.out.println("------------ " + getName(caseNumber) + " ---------------");
+           // System.out.println("------------ " + getName(caseNumber) + " ---------------");
             for (Card card : myGroup) {
-                System.out.println(" Number: " + card.getNumber() + " Name: " + card.getName() + " Group: " + card.getGroup());
+                //System.out.println(" Number: " + card.getNumber() + " Name: " + card.getName() + " Group: " + card.getGroup());
                 replacer.add(card);
             }
+            validCardsWithRuleNumber.put(RuleNumber.findFromValue(caseNumber),myGroup);
         }
+    }
+
+    public Map<RuleNumber,List<Card>> getValidCardsWithRuleNumber(){
+        return validCardsWithRuleNumber;
     }
 
     public List<Card> getArrangedList() {
@@ -95,17 +86,17 @@ public class ComboRunner {
 
     private static String getName(int value) {
         switch (value) {
-            case 1:
+            case 0:
                 return "THIRIAL";
-            case 2:
+            case 1:
                 return "DAABRUN";
-            case 3:
+            case 2:
                 return "RUN";
-            case 4:
+            case 3:
                 return "FALASH";
-            case 5:
+            case 4:
                 return "JUTE";
-            case 6:
+            case 5:
                 return "SORT";
         }
         return "NULL";

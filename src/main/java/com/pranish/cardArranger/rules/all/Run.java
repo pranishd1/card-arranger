@@ -1,9 +1,9 @@
 package com.pranish.cardArranger.rules.all;
 
-import com.pranish.cardArranger.Card;
+import com.pranish.cardArranger.card.Card;
 import com.pranish.cardArranger.cardCompare.CardCompareDesc;
 import com.pranish.cardArranger.cardCompare.CardSorter;
-import com.pranish.cardArranger.rules.CardNumbers;
+import com.pranish.cardArranger.card.CardNumbers;
 import com.pranish.cardArranger.rules.RulesAbs;
 import com.pranish.cardArranger.rules.RulesIface;
 
@@ -91,9 +91,6 @@ public class Run extends RulesAbs {
     }
 
     private void addAceTwoAndThree() {
-        if (cardCounter.containsKey(CardNumbers.getAce()) &&
-                cardCounter.containsKey(CardNumbers.getTwo()) &&
-                cardCounter.containsKey(CardNumbers.getThree())) {
             Card cardOne = getCardForNumber(CardNumbers.getAce());
             Card cardTwo = getCardForNumber(CardNumbers.getTwo());
             Card cardThree = getCardForNumber(CardNumbers.getThree());
@@ -105,7 +102,7 @@ public class Run extends RulesAbs {
                 singleGroup = new ArrayList<>(0);
             }
         }
-    }
+
 
     private boolean hasAceTwoThree() {
         boolean isFound = false;

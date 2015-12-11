@@ -1,4 +1,4 @@
-package com.pranish.cardArranger;
+package com.pranish.cardArranger.card;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by pranish on 11/14/15.
  */
-public class Const {
+public class CardConst {
     public static final int TOTAL_CARDS =52;
     public static final int TOTAL_CARD_GROUP =4;
     public static final int STARTING_CARD =1;

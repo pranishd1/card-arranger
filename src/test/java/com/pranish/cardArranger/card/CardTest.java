@@ -1,4 +1,4 @@
-package com.pranish.cardArranger;
+package com.pranish.cardArranger.card;
 
 import org.junit.Test;
 
@@ -12,11 +12,11 @@ public class CardTest {
     public void getCards(){
         try {
             System.out.println("-----------------------");
-            for(Card card:Const.getAllCards()){
+            for(Card card: CardConst.getAllCards()){
                 System.out.println(card.toString());
             }
             System.out.println("-----------------------");
-            List<Card> allCards=Const.getAllCards();
+            List<Card> allCards= CardConst.getAllCards();
             CardFolder cardFolder=new CardFolder();
             cardFolder.shuffleCard(allCards, 3);
             /*for(Card card:allCards){
@@ -30,7 +30,7 @@ public class CardTest {
     @Test
     public void getDivisionTest(){
         try {
-           List<Card> allCards=Const.getAllCards();
+           List<Card> allCards= CardConst.getAllCards();
             CardFolder cardFolder=new CardFolder();
             cardFolder.shuffleCard(allCards, 3);
             List<List<Card>> dividedCard=cardFolder.getDivision(allCards,4);
@@ -55,7 +55,7 @@ public class CardTest {
     @Test
     public void AllCardSeparationTest(){
         try{
-            List<Card> allCards=Const.getAllCards();
+            List<Card> allCards= CardConst.getAllCards();
             CardFolder cardFolder=new CardFolder();
             cardFolder.shuffleCard(allCards,3);
            List<Card> myCards=cardFolder.getDivision(allCards,4).get(0);
@@ -71,10 +71,10 @@ e.printStackTrace();
     @Test
     public void OnlyGivenNumberOfCardSeparationTest(){
         try{
-            List<Card> allCards=Const.getAllCards();
+            List<Card> allCards= CardConst.getAllCards();
             CardFolder cardFolder=new CardFolder();
             cardFolder.shuffleCard(allCards,3);
-            List<Card> myCards=cardFolder.getDivision(allCards,4,3).get(0);
+            List<Card> myCards=cardFolder.getDivision(allCards,4).get(0);
             cardFolder.sortDividedCards(myCards).toDescending();
             for(Card card:myCards){
                 System.out.println(" Number: "+card.getNumber()+" Name: "+card.getName()+" Group: "+card.getGroup());

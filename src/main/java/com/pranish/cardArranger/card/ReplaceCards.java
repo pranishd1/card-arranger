@@ -1,6 +1,4 @@
-package com.pranish.cardArranger.rules;
-
-import com.pranish.cardArranger.Card;
+package com.pranish.cardArranger.card;
 
 import java.util.List;
 

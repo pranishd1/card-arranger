@@ -1,6 +1,6 @@
 package com.pranish.cardArranger.rules.all;
 
-import com.pranish.cardArranger.Card;
+import com.pranish.cardArranger.card.Card;
 import com.pranish.cardArranger.cardCompare.CardCompareAsc;
 import com.pranish.cardArranger.cardCompare.CardCompareDesc;
 import com.pranish.cardArranger.cardCompare.CardSorter;

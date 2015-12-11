@@ -1,10 +1,10 @@
 package com.pranish.cardArranger.rules.all;
 
-import com.pranish.cardArranger.Card;
-import com.pranish.cardArranger.CardGroup;
+import com.pranish.cardArranger.card.Card;
+import com.pranish.cardArranger.card.CardGroup;
 import com.pranish.cardArranger.cardCompare.CardGroupDesc;
 import com.pranish.cardArranger.cardCompare.CardSorter;
-import com.pranish.cardArranger.rules.CardNumbers;
+import com.pranish.cardArranger.card.CardNumbers;
 import com.pranish.cardArranger.rules.RulesAbs;
 import com.pranish.cardArranger.rules.RulesIface;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by pranish on 11/15/15.
  */
-public class DabRun extends RulesAbs {
+public class DaabRun extends RulesAbs {
     private final int SINGLE_GROUP_SIZE=3;
 
     private List<Card> myGroup=new ArrayList<>(0);

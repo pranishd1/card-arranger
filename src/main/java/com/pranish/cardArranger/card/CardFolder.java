@@ -1,7 +1,6 @@
-package com.pranish.cardArranger;
+package com.pranish.cardArranger.card;
 
 import com.pranish.cardArranger.cardCompare.CardSorter;
-import com.pranish.cardArranger.rules.ReplaceCards;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,7 +61,7 @@ public class CardFolder {
         for(Card replaceCard:replaceWith){
                 newFormedCard.add(replaceCard);
         }
-        List<Card> leftOutCards=Const.subtractCards(collectionCards, replaceWith);
+        List<Card> leftOutCards= CardConst.subtractCards(collectionCards, replaceWith);
         replaceCards.setLeftOutCards(leftOutCards);
         replaceCards.setRuleArrangedCards(replaceWith);
         for(Card leftCards:leftOutCards){
@@ -73,6 +72,5 @@ public class CardFolder {
         replaceCards.setFormedCards(newFormedCard);
         return replaceCards;
     }
-
 
 }
