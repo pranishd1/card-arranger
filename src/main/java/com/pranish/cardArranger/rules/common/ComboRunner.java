@@ -67,9 +67,7 @@ public class ComboRunner {
 
     private static void addToReplacer(List<Card> myGroup, int caseNumber) {
         if(myGroup.size()>0) {
-           // System.out.println("------------ " + getName(caseNumber) + " ---------------");
             for (Card card : myGroup) {
-                //System.out.println(" Number: " + card.getNumber() + " Name: " + card.getName() + " Group: " + card.getGroup());
                 replacer.add(card);
             }
             validCardsWithRuleNumber.put(RuleNumber.findFromValue(caseNumber),myGroup);

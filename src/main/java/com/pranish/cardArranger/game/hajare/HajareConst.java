@@ -6,10 +6,7 @@ import com.pranish.cardArranger.cardCompare.ruleCompare.RuleComparison;
 import com.pranish.cardArranger.rules.common.ComboRunner;
 import com.pranish.cardArranger.rules.common.RuleNumber;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by pranish on 11/27/15.
@@ -60,8 +57,11 @@ public  class HajareConst {
         }else if(getCardGroupRuleNumber(cardGroupOne)<getCardGroupRuleNumber(cardGroupTwo)){
             return IS_GREATER;
         }else{
-            return ruleComparison.compareFor(getCardGroupRuleNumber(cardGroupOne),cardGroupOne,cardGroupTwo);
+           // return ruleComparison.compareFor(getCardGroupRuleNumber(cardGroupOne),cardGroupOne,cardGroupTwo);
+            return getCardGroupRuleNumber(cardGroupOne,cardGroupTwo);
         }
+
+
     }
 
     public int getCompareResult(int cardGroupOne,int cardGroupTwo){
@@ -84,6 +84,34 @@ public  class HajareConst {
             }
         }
         return ruleNumber;
+    }
+
+    public int getCardGroupRuleNumber(List<Card> groupOne,List<Card> groupTwo){
+       List<Card> combined=combine(groupOne,groupTwo);
+        ComboRunner comboRunner=new ComboRunner(combined);
+        List<Card> arrangedList=comboRunner.getArrangedList();
+        return findInWhichGroupFirstCardExist(arrangedList,groupOne);
+    }
+
+    private List<Card> combine(List<Card> groupOne, List<Card> groupTwo) {
+        List<Card> combine=new ArrayList<>(0);
+        for(Card card:groupOne){
+            combine.add(card);
+        }
+        for(Card card:groupTwo){
+            combine.add(card);
+        }
+        return combine;
+    }
+
+    private int findInWhichGroupFirstCardExist(List<Card> arrangedList,List<Card> group) {
+        Card firstCard=arrangedList.get(0);
+        for(Card card:group){
+            if(card.getId()==firstCard.getId()){
+                return IS_GREATER;
+            }
+        }
+        return IS_SMALLER;
     }
 
     private boolean hasSameCardsInCollection(List<Card> first,List<Card> second){

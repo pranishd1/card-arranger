@@ -20,17 +20,15 @@ public class Hajare implements GameIface {
 
     CardFolder cardFolder;
     private int manualPlayer;
+    Show show;
 
     @Override
     public void start() {
         autoArrangeCards();
+        show=new Show(players);
+        show.showCards();
+        //show.printWinner();
      }
-
-    private void autoArrangeCards(){
-        for(Player player:players){
-            player.arrangeCards();
-        }
-    }
 
     @Override
     public void initialize() throws Exception {
@@ -58,7 +56,8 @@ public class Hajare implements GameIface {
         cardFolder.shuffleCard(allCards,TIMES_TO_SHUFFLE);
         List<List<Card>> dividedCards=cardFolder.getDivision(allCards,numberOfPlayers);
         for(Player player:players){
-            player.setMyCard(dividedCards.get(tempHolder));
+            List<Card> hold=dividedCards.get(tempHolder);
+            player.setMyCard(hold);
             player.setId(tempHolder);
             player.setName(tempHolder+"");
             tempHolder++;
@@ -81,4 +80,11 @@ public class Hajare implements GameIface {
             players.add(new Player());
         }
     }
+
+    private void autoArrangeCards(){
+        for(Player player:players){
+            player.arrangeCards();
+        }
+    }
+
 }

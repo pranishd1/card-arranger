@@ -2,6 +2,8 @@ package com.pranish.cardArranger.cardCompare.ruleCompare;
 
 import com.pranish.cardArranger.card.Card;
 import com.pranish.cardArranger.cardCompare.ruleCompare.rule.*;
+import com.pranish.cardArranger.rules.RulesIface;
+import com.pranish.cardArranger.rules.all.*;
 
 import java.util.List;
 
@@ -9,34 +11,42 @@ import java.util.List;
  * Created by pranish on 12/11/15.
  */
 public class RuleCompare implements RuleComparison {
-    RuleComparator ruleComparator;
+    RulesIface rulesIface;
+    RuleComparatorIface ruleComparatorIface;
+
     @Override
     public int compareFor(int ruleNumber,List<Card> groupOne,List<Card> groupTwo) {
-        setRuleComparator(ruleNumber);
-        ruleComparator.initialize(groupOne,groupTwo);
-        return ruleComparator.getResult();
+       rulesIface=getRuleComparator(ruleNumber);
+       ruleComparatorIface =new RuleComparator();
+        ruleComparatorIface.initialize(rulesIface);
+        ruleComparatorIface.compare(groupOne,groupTwo);
+        return ruleComparatorIface.getResult();
     }
 
-    public void setRuleComparator(int ruleNumber){
+    private RulesIface getRuleComparator(int ruleNumber){
+        RulesIface rulesIface=null;
         switch (ruleNumber){
             case 0:
-                ruleComparator= new ThirialCompare();
+                rulesIface= new Thirial();
                 break;
             case 1:
-                ruleComparator=new DaabRunCompare();
+                rulesIface=new DaabRun();
                 break;
             case 2:
-                ruleComparator= new RunCompare();
+                rulesIface= new Run();
                 break;
             case 3:
-                ruleComparator= new FalashCompare();
+                rulesIface= new Falash();
                 break;
             case 4:
-                ruleComparator= new JuteCompare();
+                rulesIface= new Jute();
                 break;
             case 5:
-                ruleComparator=new SortCompare();
+                rulesIface=new Sort();
                 break;
+            default:
+                rulesIface=new Sort();
         }
+        return rulesIface;
     }
 }
