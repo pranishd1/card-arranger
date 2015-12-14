@@ -20,6 +20,13 @@ public  class HajareConst {
     private final static int IS_GREATER=1;
     private final static int IS_SMALLER=-1;
     private final static int IS_EQUAL=0;
+    private final static int IS_IDENTICAL=2;
+
+    private final static int FINAL_POINT=1000;
+
+    public static int getFinalPoint() {
+        return FINAL_POINT;
+    }
 
     RuleComparison ruleComparison;
 
@@ -39,6 +46,10 @@ public  class HajareConst {
         return IS_EQUAL;
     }
 
+    public static int getIsIdentical() {
+        return IS_IDENTICAL;
+    }
+
     public static int countHajereGamePoints(List<Card> cards){
         int sum=0;
         for(Card card:cards){
@@ -51,17 +62,63 @@ public  class HajareConst {
         return sum;
     }
 
+    public static int countHajereGamePoints(Set<Card> cards){
+        List<Card> temp=new ArrayList<>(0);
+        for(Card card:cards){
+            temp.add(card);
+        }
+        return countHajereGamePoints(temp);
+    }
+
+    public static int countHajereGamePointsFromListOfList(List<List<Card>> cards){
+        int temp=0;
+        for(List<Card> card:cards){
+            temp+=countHajereGamePoints(card);
+        }
+        return temp;
+    }
+
     public int getCompareResult(List<Card> cardGroupOne,List<Card> cardGroupTwo){
         if(getCardGroupRuleNumber(cardGroupOne)>getCardGroupRuleNumber(cardGroupTwo)){
             return  IS_SMALLER;
         }else if(getCardGroupRuleNumber(cardGroupOne)<getCardGroupRuleNumber(cardGroupTwo)){
             return IS_GREATER;
-        }else{
-           // return ruleComparison.compareFor(getCardGroupRuleNumber(cardGroupOne),cardGroupOne,cardGroupTwo);
-            return getCardGroupRuleNumber(cardGroupOne,cardGroupTwo);
+        }else if(areTheyIdentical(cardGroupOne,cardGroupTwo)){
+            return IS_IDENTICAL;
         }
+        else{
+           return ruleComparison.compareFor(getCardGroupRuleNumber(cardGroupOne),cardGroupOne,cardGroupTwo);
+            //System.out.println("Both of Same Group");
+            //return checkUsingAllComboCasesAndSelectTheFirstCard(cardGroupOne, cardGroupTwo);
+        }
+    }
 
+    private Map<Integer,Integer> getMappedCardNumber(List<Card> group){
+        Map<Integer,Integer> mappedGroup=new HashMap<>(0);
+        int incrementSize=1;
+        for(Card card:group){
+            if(mappedGroup.containsKey(card.getNumber())){
+                mappedGroup.replace(card.getNumber(),mappedGroup.get(card.getNumber())+incrementSize);
+            }else{
+                mappedGroup.put(card.getNumber(),incrementSize);
+            }
+        }
+        return mappedGroup;
+    }
 
+    private boolean areTheyIdentical(List<Card> cardGroupOne, List<Card> cardGroupTwo) {
+        Map<Integer,Integer> cardOne=getMappedCardNumber(cardGroupOne);
+        Map<Integer,Integer> cardTwo=getMappedCardNumber(cardGroupTwo);
+        return doTheyHaveSameCount(cardOne,cardTwo);
+    }
+
+    private boolean doTheyHaveSameCount(Map<Integer, Integer> cardOne, Map<Integer, Integer> cardTwo) {
+        for(Map.Entry<Integer,Integer> entry:cardOne.entrySet()){
+            if(!cardTwo.containsKey(entry.getKey()) || cardTwo.get(entry.getKey())!=entry.getValue()){
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getCompareResult(int cardGroupOne,int cardGroupTwo){
@@ -69,6 +126,16 @@ public  class HajareConst {
             return  IS_SMALLER;
         }else if(cardGroupOne<cardGroupTwo){
             return IS_GREATER;
+        }else{
+            return IS_EQUAL;
+        }
+    }
+
+    public int getIntegerCompareResult(int cardOneNumber,int cardTwoNumber){
+        if(cardOneNumber>cardTwoNumber){
+            return IS_GREATER;
+        }else if(cardOneNumber<cardTwoNumber){
+            return IS_SMALLER;
         }else{
             return IS_EQUAL;
         }
@@ -86,7 +153,7 @@ public  class HajareConst {
         return ruleNumber;
     }
 
-    public int getCardGroupRuleNumber(List<Card> groupOne,List<Card> groupTwo){
+    public int checkUsingAllComboCasesAndSelectTheFirstCard(List<Card> groupOne, List<Card> groupTwo){
        List<Card> combined=combine(groupOne,groupTwo);
         ComboRunner comboRunner=new ComboRunner(combined);
         List<Card> arrangedList=comboRunner.getArrangedList();

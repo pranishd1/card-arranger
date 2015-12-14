@@ -16,37 +16,67 @@ public class RuleCompare implements RuleComparison {
 
     @Override
     public int compareFor(int ruleNumber,List<Card> groupOne,List<Card> groupTwo) {
-       rulesIface=getRuleComparator(ruleNumber);
-       ruleComparatorIface =new RuleComparator();
+        Collecter collecter=getRuleComparator(ruleNumber);
+
+       rulesIface=collecter.getRulesIface();
+       ruleComparatorIface =collecter.getRuleComparatorIface();
+
         ruleComparatorIface.initialize(rulesIface);
         ruleComparatorIface.compare(groupOne,groupTwo);
         return ruleComparatorIface.getResult();
     }
 
-    private RulesIface getRuleComparator(int ruleNumber){
-        RulesIface rulesIface=null;
+    private Collecter getRuleComparator(int ruleNumber){
+        Collecter collecter=new Collecter();
         switch (ruleNumber){
             case 0:
-                rulesIface= new Thirial();
+                collecter.setRulesIface(new Thirial());
+                collecter.setRuleComparatorIface(new ThirialCompare());
                 break;
             case 1:
-                rulesIface=new DaabRun();
+                collecter.setRulesIface(new DaabRun());
+                collecter.setRuleComparatorIface(new DaabRunCompare());
                 break;
             case 2:
-                rulesIface= new Run();
+                collecter.setRulesIface(new Run());
+                collecter.setRuleComparatorIface(new RunCompare());
                 break;
             case 3:
-                rulesIface= new Falash();
+                collecter.setRulesIface(new Falash());
+                collecter.setRuleComparatorIface(new FalashCompare());
                 break;
             case 4:
-                rulesIface= new Jute();
+                collecter.setRulesIface(new Jute());
+                collecter.setRuleComparatorIface(new JuteCompare());
                 break;
             case 5:
-                rulesIface=new Sort();
+                collecter.setRulesIface(new Sort());
+                collecter.setRuleComparatorIface(new SortCompare());
                 break;
             default:
-                rulesIface=new Sort();
+                collecter.setRulesIface(new Sort());
+                collecter.setRuleComparatorIface(new SortCompare());
         }
+        return collecter;
+    }
+}
+class Collecter{
+    private RuleComparatorIface ruleComparatorIface;
+    private RulesIface rulesIface;
+
+    public RuleComparatorIface getRuleComparatorIface() {
+        return ruleComparatorIface;
+    }
+
+    public void setRuleComparatorIface(RuleComparatorIface ruleComparatorIface) {
+        this.ruleComparatorIface = ruleComparatorIface;
+    }
+
+    public RulesIface getRulesIface() {
         return rulesIface;
+    }
+
+    public void setRulesIface(RulesIface rulesIface) {
+        this.rulesIface = rulesIface;
     }
 }

@@ -2,12 +2,9 @@ package com.pranish.cardArranger.game.hajare;
 
 import com.pranish.cardArranger.card.Card;
 import com.pranish.cardArranger.player.Player;
-import com.pranish.cardArranger.player.PlayerDict;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by pranish on 12/11/15.
@@ -23,42 +20,95 @@ public class Show {
     private static int round=0;
     private int numberOfRounds=0;
 
+    private int shuffleRound=0;
+
     private List<Player> roundWinner;
 
-    public Show(List<Player> players){
+    public Show(int shuffleRound,List<Player> players){
+        this.shuffleRound=shuffleRound;
         this.players=players;
         roundWinner=new ArrayList<>(0);
-        numberOfRounds=this.players.get(0).getPlayerDict().getRounds().size();
+        numberOfRounds=this.players.get(0).getPlayerDict().get(this.shuffleRound).getRounds().size();
         hajareConst=new HajareConst();
-
     }
 
     public void showCards(){
-        //rounds
+        System.out.println("Shuffle: "+(shuffleRound+1));
         for(int round=0;round<numberOfRounds;round++) {
             System.out.println();
             System.out.println("Round: "+(round+1));
             System.out.println();
-            for(Player player:players){
+            for(Player player:players) {
                 System.out.println("----------------------");
                 System.out.println(player.toString());
-                for(Card card:player.getPlayerDict().getRounds().get(round)){
+                for (Card card : player.getPlayerDict().get(shuffleRound).getRounds().get(round)) {
                     System.out.println(card.toString());
                 }
                 System.out.println("----------------------");
             }
+
             Player winner=players.get(0);
             for(int player=0;player<players.size();player++){
-               int result= hajareConst.getCompareResult(winner.getPlayerDict().getRounds().get(round),
-                        players.get(player).getPlayerDict().getRounds().get(round));
+               int result= hajareConst.getCompareResult(winner.getPlayerDict().get(shuffleRound).getRounds().get(round),
+                        players.get(player).getPlayerDict().get(shuffleRound).getRounds().get(round));
                 if(result==HajareConst.getIsSmaller()){
                     winner=players.get(player);
                 }
+                if(result==HajareConst.getIsIdentical()){
+                    int innerResult=hajareConst.getIntegerCompareResult(
+                            winner.getPlayerDict().get(shuffleRound)
+                                    .getOddCards().get(0)
+                                    .getNumber(),
+                            players.get(player).getPlayerDict().get(shuffleRound).getOddCards().get(0).getNumber());
+                    if(innerResult==HajareConst.getIsSmaller()){
+                        winner=players.get(player);
+                    }else if(innerResult==HajareConst.getIsIdentical() && ruleFollowed==CONDTION_LAST_CARD_SHOW_WINS){
+                        winner=players.get(player);
+                    }
+                }
             }
-            System.out.println("Winner: "+winner.toString());
             addWinner(winner);
         }
-        //printWinner();
+        printWinner();
+    }
+
+    public void distributeWonCards(){
+        int lastRound=roundWinner.size()-1;
+        for(int round=0;round<roundWinner.size();round++) {
+            for (Player player : players) {
+                if(roundWinner.get(round).getId()==player.getId()){
+                    for(Player wonCards:players){
+                        player.getPlayerDict().get(shuffleRound).addWonCards(wonCards.getPlayerDict().get(shuffleRound).getRounds().get(round));
+
+                        if(round==lastRound){
+                            player.getPlayerDict().get(shuffleRound).addWonCards(wonCards.getPlayerDict().get(shuffleRound).getOddCards());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public List<Player> getWinnerPlayers(){
+        List<Player> temp=new ArrayList<>(0);
+        for(Player player:roundWinner){
+            if(!temp.contains(player)){
+                temp.add(player);
+            }
+        }
+        return temp;
+    }
+
+    public Player getFinalWinner(){
+        int max=0;
+        Player tempPlayer=players.get(0);
+        for(Player player:players){
+            if(player.getPoints()>max){
+                tempPlayer=player;
+                max=player.getPoints();
+            }
+        }
+        return tempPlayer;
     }
 
     private void addWinner(Player player){
@@ -73,74 +123,28 @@ public class Show {
         }
     }
 
-    /*private void addWinnersCards(PlayerDict winner, List<List<Card>> wonCards) {
-
-        if(hasThisPlayerWon(winner)){
-            PlayerDict player=getPlayerOf(winner);
-            for(List<Card> cards:wonCards){
-                player.addWonCards(cards);
-            }
-        }else{
-            for(List<Card> cards:wonCards){
-                winner.addWonCards(cards);
-            }
-            winners.add(winner);
-        }
-
-
-    }*/
-
-   /* private PlayerDict getPlayerOf(PlayerDict winner) {
-        PlayerDict playerDict=null;
-        for(PlayerDict player:winners){
-            if(player.getPlayer().getId()==winner.getPlayer().getId()){
-                playerDict=player;
+    public int getMaxPointUpdate() {
+        int max=0;
+        Player tempPlayer=players.get(0);
+        for(Player player:players){
+            if(player.getPoints()>max){
+                tempPlayer=player;
+                max=player.getPoints();
             }
         }
-        return playerDict;
-    }*/
+        return max;
 
-   /* public boolean hasThisPlayerWon(PlayerDict playerDict){
-        boolean nope=false;
-        for(PlayerDict player:winners){
-            if(player.getPlayer().getId()==playerDict.getPlayer().getId()){
-                nope=true;
-            }
-        }
-        return nope;
-    }*/
-
-    private PlayerDict getWinnerPlayer(List<PlayerDict> playerDicts){
-        PlayerDict winner=new PlayerDict();
-        for(int i=0;i<playerDicts.size()-1;i++){
-            if(hajareConst.getCompareResult(playerDicts.get(i).getMyCards(),playerDicts.get(i+1).getMyCards())
-                    ==HajareConst.getIsGreater()){
-                winner=playerDicts.get(i);
-            }else if(hajareConst.getCompareResult(playerDicts.get(i).getMyCards(),playerDicts.get(i+1).getMyCards())
-                    ==HajareConst.getIsSmaller()){
-                winner=playerDicts.get(i + 1);
-            }else{
-                if(ruleFollowed==CONDITION_FIRST_CARD_SHOW_WINS){
-                    winner=playerDicts.get(i);
-                }else{
-                    winner=playerDicts.get(i + 1);
-                }
-            }
-        }
-        return winner;
-    }
-
-    private Map<Integer,Integer> getHighestPlayerId(int[] tempHolder) {
-        int maxNumber=tempHolder[0];
-        int maxPlayerId=0;
-        for(int i=0;i<tempHolder.length;i++){
-            if(hajareConst.getCompareResult(maxNumber,tempHolder[i])==HajareConst.getIsSmaller()){
-                maxNumber=tempHolder[i];
-                maxPlayerId=i;
-            }
-        }
-        Map<Integer,Integer> coll=new HashMap<>(0);
-        coll.put(maxPlayerId,maxNumber);
-        return coll;
     }
 }
+/* System.out.println();
+            System.out.println("Round: "+(round+1));
+            System.out.println();
+            for(Player player:players){
+                System.out.println("----------------------");
+                System.out.println(player.toString());
+                for(Card card:player.getPlayerDict().getRounds().get(round)){
+                    System.out.println(card.toString());
+                }
+                System.out.println("----------------------");
+            }*/
+

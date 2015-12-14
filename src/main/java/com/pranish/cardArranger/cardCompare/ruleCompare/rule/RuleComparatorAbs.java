@@ -1,27 +1,23 @@
 package com.pranish.cardArranger.cardCompare.ruleCompare.rule;
 
 import com.pranish.cardArranger.card.Card;
+import com.pranish.cardArranger.game.hajare.HajareConst;
 import com.pranish.cardArranger.rules.RulesIface;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pranish on 12/11/15.
  */
-public class RuleComparator implements RuleComparatorIface {
-    private List<Card> groupOne;
-    private List<Card> groupTwo;
-    private List<Card> combine;
-    private RulesIface rulesIface;
-    private List<Card> result;
+public abstract class RuleComparatorAbs implements RuleComparatorIface {
+    protected List<Card> groupOne;
+    protected List<Card> groupTwo;
+    protected List<Card> combine;
+    protected RulesIface rulesIface;
+    protected List<Card> result;
 
     @Override
-    public void initialize(RulesIface rulesIface) {
-        this.rulesIface=rulesIface;
-        combine=new ArrayList<>(0);
-        result=new ArrayList<>(0);
-    }
+    public abstract void initialize(RulesIface rulesIface) ;
 
     @Override
     public void compare(List<Card> groupOne, List<Card> groupTwo) {
@@ -40,8 +36,12 @@ public class RuleComparator implements RuleComparatorIface {
     }
 
     private int compare() {
-        Card firstOfTheResultIsWinner=result.get(0);
-        return findWhereThisCardExist(firstOfTheResultIsWinner);
+        if(result.size()>0) {
+            Card firstOfTheResultIsWinner = result.get(0);
+            return findWhereThisCardExist(firstOfTheResultIsWinner);
+        }else{
+            return HajareConst.getIsEqual();
+        }
     }
 
     private int findWhereThisCardExist(Card firstOfTheResultIsWinner) {

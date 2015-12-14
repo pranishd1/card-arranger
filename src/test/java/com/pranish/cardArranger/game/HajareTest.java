@@ -1,5 +1,6 @@
 package com.pranish.cardArranger.game;
 
+import com.pranish.cardArranger.game.Iface.GameMeta;
 import com.pranish.cardArranger.game.hajare.Hajare;
 import org.junit.Test;
 
@@ -14,10 +15,15 @@ public class HajareTest {
         Hajare hajare=new Hajare();
         int numberOfPlayer=4;
         try {
-            hajare.initialize();
-            hajare.setNumberOfPlayer(numberOfPlayer);
-            hajare.shuffleAndDivideCards();
-            hajare.start();
+            while (!hajare.hasSomeoneGotMoreThanFinalPoint()) {
+                hajare.initialize();
+                hajare.setNumberOfPlayer(numberOfPlayer);
+                hajare.shuffleAndDivideCards();
+                hajare.start();
+            }
+            GameMeta meta=hajare.getMetaInfo();
+            System.out.println("Final Winner: ");
+            System.out.println(hajare.getWinner().toString()+" With Points: "+hajare.getWinner().getPoints());
         } catch (Exception e) {
             e.printStackTrace();
         }
