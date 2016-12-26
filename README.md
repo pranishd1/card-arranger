@@ -44,7 +44,8 @@ This solution is a single solution from different possibilities that can be form
  
 These six rules can be used to determine list of cards on which group does it fall. 
 
-##
+-----------
+
 All cards that are won by the user are saved in won cards. 
 A card that is odd in a single shuffle is stored in odd cards. 
  
@@ -79,8 +80,8 @@ Every six rules has different comparing strategy some method maybe common though
 The result is returned after the comparison determining which of the given two collection of the cards is greater or smaller. 
 If the two collection of cards have same card with the same number then ,a certain condition is applied .it's 
  
-1.select the first of the player who has passed the cards. 
-2.select the second of the player who replaces the first player. 
+1.select the first of the player who has passed the cards
+2.select the second of the player who replaces the first player
  
  
 In comparison cases first it is determined in which rule the arranged group falls .the result is then compared. 
