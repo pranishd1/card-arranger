@@ -96,7 +96,7 @@ Secondly they are checked if the cards are identical that is if the collections 
 Third,the collection is sent to the six rules comparing techniques and get the result. 
  
 All three comparing technique returns same identical value determining the collection of cards which is greater or smaller. 
-Greater value is 1 
-Smaller value is -1 
-Identical value is -2 
+Greater value is 1 ,
+Smaller value is -1 ,
+Identical value is -2 ,
 Equal value is -0 
