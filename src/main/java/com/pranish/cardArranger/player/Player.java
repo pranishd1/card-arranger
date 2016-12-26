@@ -23,6 +23,7 @@ public class Player implements PlayerIface{
     public Player(){
         playerDicts=new ArrayList<>(0);
         this.myCard=new ArrayList<>(0);
+        myStatus=PlayerStatus.AUTO;
     }
 
     @Override

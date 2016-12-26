@@ -17,7 +17,6 @@ public class HajareMeta implements GameMeta{
     @Override
     public void setGame(GameIface iface) {
         this.gameIface=iface;
-
         initialize();
     }
 

@@ -10,9 +10,10 @@ import java.util.List;
 public interface GameIface {
     public void initialize() throws Exception;
     public void setNumberOfPlayer(int numberOfPlayer);
-    public void setManualNumberOfPlayer(int numberOfPlayer);
+    public List<Player> setNumberOfManualPlayer(int numberOfPlayer);
     public void shuffleAndDivideCards();
     public void start();
     public List<Player> getPlayers();
     public GameMeta getMetaInfo();
+    public boolean isManualPlayerReady();
 }

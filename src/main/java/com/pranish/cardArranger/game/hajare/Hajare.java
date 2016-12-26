@@ -6,6 +6,7 @@ import com.pranish.cardArranger.card.CardFolder;
 import com.pranish.cardArranger.game.Iface.GameIface;
 import com.pranish.cardArranger.game.Iface.GameMeta;
 import com.pranish.cardArranger.player.Player;
+import com.pranish.cardArranger.player.PlayerStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,37 +15,43 @@ import java.util.List;
  * Created by pranish on 11/27/15.
  */
 public class Hajare implements GameIface {
+
     private static final int TIMES_TO_SHUFFLE=3;
+
     private int roundHighestPlayerPoint=0;
     private int numberOfPlayers=0;
-    private List<Player> players;
-    private List<Card> allCards;
-
     private int wholeCardShuffle=0;
 
-    CardFolder cardFolder;
-    private int manualPlayer;
-    Show show;
+    private List<Player> manualPlayers;
+    private List<Player> autoPlayers;
+    private List<Player> allPlayers;
+    private List<Card> allCards;
+
+    private CardFolder cardFolder;
+    private Show show;
+    private GameMeta gameMeta;
 
     public Hajare(){
-        players=new ArrayList<>(0);
+        autoPlayers =new ArrayList<>(0);
+        manualPlayers=new ArrayList<>(0);
+        allPlayers=new ArrayList<>(0);
     }
 
     @Override
     public void start() {
 
             autoArrangeCards();
-            show = new Show(wholeCardShuffle,players);
+            show = new Show(wholeCardShuffle, getPlayers());
             show.showCards();
             show.distributeWonCards();
             roundHighestPlayerPoint=show.getMaxPointUpdate();
             List<Player> winners = show.getWinnerPlayers();
             System.out.println("This Shuffle Points:");
-            for(Player player:players){
+            for(Player player: autoPlayers){
                 System.out.println(player.toString()+" = "+player.getThisRoundPoints());
             }
             System.out.println("Whole Game Points:");
-            for (Player player : players) {
+            for (Player player : autoPlayers) {
                 System.out.println(player.toString() + " = " + player.getPoints());
             }
         //show.printWinner();
@@ -53,14 +60,20 @@ public class Hajare implements GameIface {
 
     @Override
     public List<Player> getPlayers() {
-        return players;
+        combineAllPlayers();
+        return allPlayers;
     }
 
     @Override
     public GameMeta getMetaInfo() {
-        GameMeta gameMeta=new HajareMeta();
+        gameMeta=new HajareMeta();
         gameMeta.setGame(this);
         return gameMeta;
+    }
+
+    @Override
+    public boolean isManualPlayerReady() {
+        return false;
     }
 
     @Override
@@ -73,14 +86,21 @@ public class Hajare implements GameIface {
     @Override
     public void setNumberOfPlayer(int numberOfPlayer) {
         numberOfPlayers=numberOfPlayer;
-        createPlayers(numberOfPlayers);
+        createAutoPlayers(numberOfPlayers);
+        combineAllPlayers();
     }
 
     @Override
-    public void setManualNumberOfPlayer(int numberOfPlayer) {
-        manualPlayer=numberOfPlayer;
-        numberOfPlayers+=manualPlayer;
-        createPlayers(numberOfPlayers);
+    public List<Player> setNumberOfManualPlayer(int numberOfPlayer) {
+      manualPlayers=new ArrayList<>(0);
+        for(int i=0;i<numberOfPlayer;i++){
+            Player player=new Player();
+            player.setMyStatus(PlayerStatus.MANUAL);
+            player.setId(i);
+            player.setName(i + "");
+            manualPlayers.add(player);
+       }
+        return manualPlayers;
     }
 
     @Override
@@ -90,7 +110,7 @@ public class Hajare implements GameIface {
         cardFolder.shuffleCard(allCards,TIMES_TO_SHUFFLE);
         List<List<Card>> dividedCards=cardFolder.getDivision(allCards,numberOfPlayers);
 
-        for(Player player:players){
+        for(Player player: allPlayers){
             List<Card> hold=dividedCards.get(tempHolder);
             player.setMyCards(hold);
             tempHolder++;
@@ -118,21 +138,32 @@ public class Hajare implements GameIface {
         allCards= CardConst.getAllCards();
     }
 
-    private void createPlayers(int numberOfPlayers){
-        if(players.isEmpty()) {
-            players = new ArrayList<>(numberOfPlayers);
+    private void createAutoPlayers(int numberOfPlayers){
+        if(autoPlayers.isEmpty()) {
+            autoPlayers = new ArrayList<>(numberOfPlayers);
             for (int i = 0; i < numberOfPlayers; i++) {
                 Player player = new Player();
                 player.setId(i);
                 player.setName(i + "");
-                players.add(player);
+                player.setMyStatus(PlayerStatus.AUTO);
+                autoPlayers.add(player);
             }
         }
     }
 
     private void autoArrangeCards(){
-        for(Player player:players){
+        for(Player player: autoPlayers){
             player.arrangeCards();
+        }
+    }
+
+    private void combineAllPlayers(){
+        allPlayers.clear();
+        for(Player player:manualPlayers){
+            allPlayers.add(player);
+        }
+        for(Player player:autoPlayers){
+            allPlayers.add(player);
         }
     }
 

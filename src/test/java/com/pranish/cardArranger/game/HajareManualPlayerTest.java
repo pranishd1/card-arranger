@@ -2,24 +2,27 @@ package com.pranish.cardArranger.game;
 
 import com.pranish.cardArranger.game.Iface.GameMeta;
 import com.pranish.cardArranger.game.hajare.Hajare;
-import org.junit.Test;
+import com.pranish.cardArranger.player.Player;
+
+import java.util.List;
 
 /**
- * Created by pranish on 12/11/15.
+ * Created by pranish on 12/15/15.
  */
-public class HajareTest {
+public class HajareManualPlayerTest {
 
-    @Test
-    public void startTest(){
+    public static void main(String[] args){
         Hajare hajare=new Hajare();
-        int numberOfPlayer=4;
+        int numberOfAllPlayer=4;
+        List<Player> manualPlayer=hajare.setNumberOfManualPlayer(1);
         try {
-            while (!hajare.hasSomeoneGotMoreThanFinalPoint()) {
+
                 hajare.initialize();
-                hajare.setNumberOfPlayer(numberOfPlayer);
+                hajare.setNumberOfPlayer(numberOfAllPlayer);
                 hajare.shuffleAndDivideCards();
-                hajare.start();
-            }
+                if(hajare.isManualPlayerReady()) {
+                    hajare.start();
+                }
             GameMeta meta=hajare.getMetaInfo();
             System.out.println("Final Winner: ");
             System.out.println(hajare.getWinner().toString()+" With Points: "+hajare.getWinner().getPoints());
@@ -27,6 +30,5 @@ public class HajareTest {
             e.printStackTrace();
         }
     }
-
-
 }
+
